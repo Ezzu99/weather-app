@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap');
+
+.header {
+    margin: 0 4%;
+}
+
+.header-app-name {
+    margin: 0;
+    padding: 10px 0 0 0;
+    color: white;
+    font-family: 'Comfortaa', cursive;
+    font-size: calc(10px + 4vmin);
+}
+
+.content {
+    width: 100%;
+    height: 70vh;
+    padding: 0 4%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.content-getWeather {
+    width: 400px;
+    margin-right: 18px;
+}
+
+.getWeather-moto {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-family: 'Comfortaa', cursive;
+    font-size: calc(10px + 6vmin);
+}
+
+.input {
+    width: 100%;
+    margin-top: calc(10px + 3vmin);
+    padding-bottom: 1.5vmin;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: white;
+    font-size: calc(10px + 2vmin);
+    border-bottom: 2px solid white;
+}
+
+.content-weather {
+    width: 650px;
+    height: 90%;
+    background: rgba( 255, 255, 255, 0.25 );
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    opacity: 0;
+    transform: translate(10px, 0);
+    animation: fadein 0.5s ease-out 0.3s 1 forwards;
+    overflow: auto;
+}
+
+.card-appear {
+    opacity: 0;
+}
+
+.card-appear.card-appear-active {
+    opacity: 1;
+    transition: all 600ms ease-in;
+}
+
+.card-enter {
+    opacity: 0;
+}
+
+.card-enter.card-enter-active {
+    opacity: 1;
+    transition: all 600ms ease-in;
+}
+
+.card-exit {
+    opacity: 1;
+}
+
+.card-exit.card-exit-active {
+    display: none;
+    transition: all 0ms ease-in;
+}
+.card-exit-done {
+    display: none;
+}
+
+.image-clouds {
+    width: 400px;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
+}
+
+@media only screen and (max-width: 480px) {
+    .header {
+        margin: 0;
+    }
+    
+    .header-app-name {
+        padding: 10px 0 0 0;
+        font-size: calc(10px + 6vmin);
+        text-align: center;
+    }
+
+    .content {
+        margin: 0;
+        margin-top: 20px;
+        padding: 8px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .content-getWeather {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .content-weather {
+        width: 100%;
+        margin: 10px;
+    }
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+        transform: translate(10px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+}
