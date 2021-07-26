@@ -40,7 +40,9 @@ const Weather = () => {
     const getData = async (event) => {
         event.preventDefault();
 
-        await api.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=2a3485281c547c746c1233fd135b2ea5`).then(res => {
+        console.log(process.env);
+
+        await api.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${secrets.AUTH_KEY}`).then(res => {
             setwData(res.data);
         }).catch(e => {
             console.log(e);
