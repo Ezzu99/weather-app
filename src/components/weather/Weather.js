@@ -5,52 +5,89 @@ import WeatherData from './weatherData/WeatherData';
 import './Weather.css';
 import Clouds from '../../assets/clouds.png';
 
-const api = axios.create();
+const api = axios.create({
+    baseURL : 'http://dataservice.accuweather.com'
+});
 
 const Weather = () => {
 
-    const [wData, setwData] = useState({
-        name : 'Search City',
-        sys : {
-            id : -1
-        },
-        weather : [{
-            description : 'none',
-            icon : '01d'
-        }],
-        main : {
-            feels_like : 273,
-            humidity : 0,
-            pressure : 0,
-            temp : 273,
-            temp_max : 273,
-            temp_min : 273
-        },
-        visibility : 0,
-        clouds : {
-            all : 0
-        },
-        wind : {
-            deg : 0,
-            speed : 0
-        }
-    });
     const [city, setCity] = useState('');
+    const [cityData, setcityData] = useState([{
+        Key : -1,
+        LocalizedName : "Search City"
+    }])
+    const [cityWeather, setcityWeather] = useState([{
+        Temperature : {
+            Metric : {
+                Value : 0
+            }
+        },
+        TemperatureSummary : {
+            Past24HourRange : {
+                Maximum : {
+                    Metric : {
+                        Value : 0
+                    }
+                },
+                Minimum : {
+                    Metric : {
+                        Value : 0
+                    }
+                }
+            }
+        },
+        WeatherText : 'none',
+        RealFeelTemperature : {
+            Metric : {
+                Value : 0
+            }
+        },
+        RelativeHumidity : 0,
+        Pressure : {
+            Metric : {
+                Value : 0
+            }
+        },
+        visibility : {
+            Metric : {
+                Value : 0
+            }
+        },
+        CloudCover : 0,
+        Wind : {
+            Direction : {
+                Degrees : 0
+            },
+            Speed : {
+                Metric : {
+                    Value : 0
+                }
+            }
+        },
+        UVIndex : 0
+    }]);
 
     const getData = async (event) => {
         event.preventDefault();
 
         console.log(process.env);
 
-        await api.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${secrets.AUTH_KEY}`).then(res => {
-            setwData(res.data);
-        }).catch(e => {
-            console.log(e);
+        await api.get(`locations/v1/cities/search?apikey=DfclVlj2OGUP2apA2DAjx9KkIGOU4fAm&q=${city}`)
+        .then(res => {
+            setcityData(res.data);
         })
+        .catch(e => console.log(e))
+
+        await api.get(`currentconditions/v1/q=261158?apikey=DfclVlj2OGUP2apA2DAjx9KkIGOU4fAm&details=true`)
+        .then(res => {
+            setcityWeather(res.data);
+        })
+        .catch(e => console.log(e))
 
         setCity('');
 
-        console.log(wData);
+        console.log(cityData);
+        console.log(cityWeather);
     }
 
     const inputHandler = (event) => {
@@ -72,24 +109,25 @@ const Weather = () => {
                 <div className="content-weather">
                     <TransitionGroup>
                         <CSSTransition
-                            key={wData.sys.id}
+                            key={cityData[0].Key}
                             timeout={600}
                             classNames="card"
                         >
                             <WeatherData
-                                cityName={wData.name.toUpperCase()}
-                                iconp={`http://openweathermap.org/img/wn/${wData.weather[wData.weather.length-1].icon}@2x.png`}
-                                currentTemp={wData.main.temp}
-                                maxTemp={wData.main.temp_max}
-                                minTemp={wData.main.temp_min}
-                                description={wData.weather[wData.weather.length-1].description}
-                                feelsLike={wData.main.feels_like}
-                                humidity={wData.main.humidity}
-                                pressure={wData.main.pressure}
-                                visibility={wData.visibility}
-                                cloudiness={wData.clouds.all}
-                                windDeg={wData.wind.deg}
-                                windSpeed={wData.wind.speed}
+                                cityName={cityData[0].LocalizedName}
+                                iconp=""
+                                currentTemp={cityWeather[0].Temperature.Metric.Value}
+                                maxTemp={cityWeather[0].TemperatureSummary.Past24HourRange.Maximum.Metric.Value}
+                                minTemp={cityWeather[0].TemperatureSummary.Past24HourRange.Minimum.Metric.Value}
+                                description={cityWeather[0].WeatherText}
+                                feelsLike={cityWeather[0].RealFeelTemperature.Metric.Value}
+                                humidity={cityWeather[0].RelativeHumidity}
+                                pressure={cityWeather[0].Pressure.Metric.Value}
+                                visibility={cityWeather[0].visibility.Metric.Value}
+                                cloudiness={cityWeather[0].CloudCover}
+                                windDeg={cityWeather[0].Wind.Direction.Degrees}
+                                windSpeed={cityWeather[0].Wind.Speed.Metric.Value}
+                                uvIndex={cityWeather[0].UVIndex}
                             />
                         </CSSTransition>
                     </TransitionGroup>
